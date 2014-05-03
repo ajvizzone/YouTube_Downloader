@@ -16,7 +16,7 @@ namespace YouTube_Downloader
         private string[] args;
 
         public MainForm()
-        {
+        {            
             InitializeComponent();
             InitializeMainMenu();
 
@@ -61,12 +61,16 @@ namespace YouTube_Downloader
             SettingsEx.SelectedDirectory = cbSaveTo.SelectedIndex;
 
             SettingsEx.AutoConvert = chbAutoConvert.Checked;
+            SettingsEx.AutoDelete = cbAutoDelete.Checked;
 
             SettingsEx.Save();
+
+            
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            Debug.WriteLine("the form loading");
             if (!SettingsEx.WindowStates.ContainsKey(this.Name))
             {
                 SettingsEx.WindowStates.Add(this.Name, new WindowState(this.Name));
@@ -74,10 +78,11 @@ namespace YouTube_Downloader
 
             SettingsEx.WindowStates[this.Name].RestoreForm(this);
 
+            
             cbSaveTo.Items.AddRange(SettingsEx.SaveToDirectories.ToArray());
             cbSaveTo.SelectedIndex = SettingsEx.SelectedDirectory;
-
             chbAutoConvert.Checked = SettingsEx.AutoConvert;
+            cbAutoDelete.Checked = SettingsEx.AutoDelete;
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -453,7 +458,9 @@ namespace YouTube_Downloader
 
         private void optionsMenuItem_Click(object sender, EventArgs e)
         {
-
+            Options optionsMenu = new Options();
+            optionsMenu.Show();
+            this.Hide();
         }
 
         #endregion
@@ -737,6 +744,9 @@ namespace YouTube_Downloader
             lvQueue.AddEmbeddedControl(ll, 5, item.Index);
 
             item.Convert(input, output, start, end);
+
+            if (SettingsEx.AutoDelete == true)
+                File.Delete(input);
         }
 
         public void Crop(string input, string output)
@@ -908,6 +918,16 @@ namespace YouTube_Downloader
 
             item.Selected = true;
         }
+
+        private void cbAutoDelete_CheckedChanged(object sender, EventArgs e)
+        {
+            SettingsEx.AutoDelete = cbAutoDelete.Checked;
+        }
+
+        private void cbSaveTo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SettingsEx.SelectedDirectory = cbSaveTo.SelectedIndex;
+        }        
     }
 
     public enum OperationStatus { Canceled, Failed, None, Paused, Success, Working }
@@ -1043,6 +1063,9 @@ namespace YouTube_Downloader
         {
             if (OperationComplete != null)
                 OperationComplete(this, e);
+
+            if( SettingsEx.AutoDelete == true )
+                File.Delete(Input);
         }
     }
 

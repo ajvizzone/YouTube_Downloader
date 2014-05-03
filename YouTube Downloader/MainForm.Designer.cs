@@ -40,7 +40,6 @@
             this.btnDownload = new System.Windows.Forms.Button();
             this.cbQuality = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnToDo = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.contextMenu1 = new System.Windows.Forms.ContextMenu();
@@ -76,7 +75,7 @@
             this.txtInput = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.queueTabPage = new System.Windows.Forms.TabPage();
-            this.chbAutoConvert = new System.Windows.Forms.CheckBox();
+            this.cbAutoDelete = new System.Windows.Forms.CheckBox();
             this.lvQueue = new ListViewEmbeddedControls.ListViewEx();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -84,6 +83,7 @@
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chbAutoConvert = new System.Windows.Forms.CheckBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.groupBox1.SuspendLayout();
@@ -182,6 +182,7 @@
             this.cbSaveTo.Name = "cbSaveTo";
             this.cbSaveTo.Size = new System.Drawing.Size(269, 21);
             this.cbSaveTo.TabIndex = 5;
+            this.cbSaveTo.SelectedIndexChanged += new System.EventHandler(this.cbSaveTo_SelectedIndexChanged);
             // 
             // label4
             // 
@@ -219,7 +220,6 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Gainsboro;
-            this.panel1.Controls.Add(this.btnToDo);
             this.panel1.Controls.Add(this.btnExit);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 321);
@@ -229,15 +229,6 @@
             this.panel1.Size = new System.Drawing.Size(628, 46);
             this.panel1.TabIndex = 1;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
-            // 
-            // btnToDo
-            // 
-            this.btnToDo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnToDo.Location = new System.Drawing.Point(460, 11);
-            this.btnToDo.Name = "btnToDo";
-            this.btnToDo.Size = new System.Drawing.Size(75, 23);
-            this.btnToDo.TabIndex = 2;
-            this.btnToDo.UseVisualStyleBackColor = true;
             // 
             // btnExit
             // 
@@ -589,8 +580,9 @@
             // 
             // queueTabPage
             // 
-            this.queueTabPage.Controls.Add(this.chbAutoConvert);
+            this.queueTabPage.Controls.Add(this.cbAutoDelete);
             this.queueTabPage.Controls.Add(this.lvQueue);
+            this.queueTabPage.Controls.Add(this.chbAutoConvert);
             this.queueTabPage.Location = new System.Drawing.Point(4, 22);
             this.queueTabPage.Name = "queueTabPage";
             this.queueTabPage.Padding = new System.Windows.Forms.Padding(3);
@@ -599,16 +591,16 @@
             this.queueTabPage.Text = "Queue";
             this.queueTabPage.UseVisualStyleBackColor = true;
             // 
-            // chbAutoConvert
+            // cbAutoDelete
             // 
-            this.chbAutoConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.chbAutoConvert.AutoSize = true;
-            this.chbAutoConvert.Location = new System.Drawing.Point(6, 248);
-            this.chbAutoConvert.Name = "chbAutoConvert";
-            this.chbAutoConvert.Size = new System.Drawing.Size(164, 17);
-            this.chbAutoConvert.TabIndex = 3;
-            this.chbAutoConvert.Text = "Convert to MP3 automatically";
-            this.chbAutoConvert.UseVisualStyleBackColor = true;
+            this.cbAutoDelete.AutoSize = true;
+            this.cbAutoDelete.Location = new System.Drawing.Point(176, 248);
+            this.cbAutoDelete.Name = "cbAutoDelete";
+            this.cbAutoDelete.Size = new System.Drawing.Size(193, 17);
+            this.cbAutoDelete.TabIndex = 11;
+            this.cbAutoDelete.Tag = "properties";
+            this.cbAutoDelete.Text = "Auto Delete Video After Conversion";
+            this.cbAutoDelete.UseVisualStyleBackColor = true;
             // 
             // lvQueue
             // 
@@ -653,6 +645,17 @@
             // columnHeader6
             // 
             this.columnHeader6.Text = "Input";
+            // 
+            // chbAutoConvert
+            // 
+            this.chbAutoConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.chbAutoConvert.AutoSize = true;
+            this.chbAutoConvert.Location = new System.Drawing.Point(6, 248);
+            this.chbAutoConvert.Name = "chbAutoConvert";
+            this.chbAutoConvert.Size = new System.Drawing.Size(164, 17);
+            this.chbAutoConvert.TabIndex = 10;
+            this.chbAutoConvert.Text = "Convert to MP3 automatically";
+            this.chbAutoConvert.UseVisualStyleBackColor = true;
             // 
             // openFileDialog1
             // 
@@ -701,7 +704,6 @@
         private System.Windows.Forms.ComboBox cbQuality;
         private System.Windows.Forms.TextBox txtYoutubeLink;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button btnToDo;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnPaste;
         private ListViewEmbeddedControls.ListViewEx lvQueue;
@@ -751,9 +753,10 @@
         private System.Windows.Forms.Button btnBrowseInput;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-        private System.Windows.Forms.CheckBox chbAutoConvert;
         private System.Windows.Forms.Label lFFmpegMissing;
         private System.Windows.Forms.Button btnCheckAgain;
+        private System.Windows.Forms.CheckBox cbAutoDelete;
+        private System.Windows.Forms.CheckBox chbAutoConvert;
     }
 }
 
